@@ -1,4 +1,4 @@
-         0  jmp  0   30
+         0  jmp  0   34
          1  jmp  0    2
          2  int  0    5
          3  lod  1    3
@@ -27,11 +27,15 @@
         26  opr  0    5
         27  sto  0    4
         28  jmp  0    9
-        29  opr  0    0
-        30  int  0    8
-        31  lit  0    7
-        32  sto  0    3
-        33  lit  0   85
-        34  sto  0    4
-        35  cal  0    2
-        36  opr  0    0
+        29  lod  0    3
+        30  opr  0   14
+        31  lod  0    4
+        32  opr  0   15
+        33  opr  0    0
+        34  int  0    8
+        35  lit  0    7
+        36  sto  0    3
+        37  lit  0   85
+        38  sto  0    4
+        39  cal  0    2
+        40  opr  0    0

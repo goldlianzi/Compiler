@@ -470,7 +470,28 @@ void statement(unsigned long fsys) {
         statement(fsys);
         gen(jmp, 0, cx1);
         code[cx2].a = cx;
-    }
+    } else if (sym == writesym) { // write(Exp{,Exp})
+		getsym();
+		if (sym == lparen) {
+			getsym();
+		}
+		else {
+			// 报错处理
+		}
+		expression(fsys | comma | rparen);
+		if (sym == comma) gen(opr, 0, 14); else gen(opr, 0, 15);
+		while (sym == comma) {
+			getsym();
+			expression(fsys | comma | rparen);
+			if (sym == comma) gen(opr, 0, 14); else gen(opr, 0, 15);
+		}
+		if (sym == rparen) {
+			getsym();
+		}
+		else {
+			// 报错处理
+		}
+	}
     test(fsys, 0, 19);
 }
 
@@ -688,6 +709,7 @@ void main() {
     strcpy(word[8], "then      ");
     strcpy(word[9], "var       ");
     strcpy(word[10], "while     ");
+    strcpy(word[11], "write     ");
     wsym[0] = beginsym; //wsym[]无符号长整型数组 关键字对应的十六进制码？
     wsym[1] = callsym;
     wsym[2] = constsym;
@@ -699,6 +721,7 @@ void main() {
     wsym[8] = thensym;
     wsym[9] = varsym;
     wsym[10] = whilesym;
+    wsym[11] = writesym;
     ssym['+'] = plus; //ssym[]类型同wsym[] 操作符对应的十六进制码？
     ssym['-'] = minus;
     ssym['*'] = times;
@@ -718,7 +741,7 @@ void main() {
     strcpy(mnemonic[jmp], "jmp");
     strcpy(mnemonic[jpc], "jpc");
     declbegsys = constsym | varsym | procsym; //{常量 变量 过程名} 名字类型
-    statbegsys = beginsym | callsym | ifsym | whilesym;  //{开始 调用 条件 循环} 保留字类型
+    statbegsys = beginsym | callsym | ifsym | whilesym | writesym;  //{开始 调用 条件 循环} 保留字类型
     facbegsys = ident | number | lparen; // {标识符 数字 左括号}
 
     printf("please input source program file name: ");

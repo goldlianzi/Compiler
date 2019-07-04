@@ -85,43 +85,51 @@ void interpret(){
 	    case opr:
 		switch(i.a){ 	// operator
 		    case 0:	// return
-			t=b-1; p=s[t+3]; b=s[t+2];
-			break;
+                t=b-1; p=s[t+3]; b=s[t+2];
+                break;
 		    case 1:
-			s[t]=-s[t];
-			break;
+                s[t]=-s[t];
+                break;
 		    case 2:
-			t=t-1; s[t]=s[t]+s[t+1];
-			break;
+                t=t-1; s[t]=s[t]+s[t+1];
+                break;
 		    case 3:
-			t=t-1; s[t]=s[t]-s[t+1];
-			break;
+                t=t-1; s[t]=s[t]-s[t+1];
+                break;
 		    case 4:
-			t=t-1; s[t]=s[t]*s[t+1];
-			break;
+                t=t-1; s[t]=s[t]*s[t+1];
+                break;
 		    case 5:
-			t=t-1; s[t]=s[t]/s[t+1];
-			break;
+                t=t-1; s[t]=s[t]/s[t+1];
+                break;
 		    case 6:
-			s[t]=s[t]%2;
-			break;
+                s[t]=s[t]%2;
+                break;
 		    case 8:
-			t=t-1; s[t]=(s[t]==s[t+1]);
-			break;
+                t=t-1; s[t]=(s[t]==s[t+1]);
+                break;
 		    case 9:
-			t=t-1; s[t]=(s[t]!=s[t+1]);
-			break;
+                t=t-1; s[t]=(s[t]!=s[t+1]);
+                break;
 		    case 10:
-			t=t-1; s[t]=(s[t]<s[t+1]);
-			break;
+                t=t-1; s[t]=(s[t]<s[t+1]);
+                break;
 		    case 11:
-			t=t-1; s[t]=(s[t]>=s[t+1]);
-			break;
+                t=t-1; s[t]=(s[t]>=s[t+1]);
+                break;
 		    case 12:
-			t=t-1; s[t]=(s[t]>s[t+1]);
-			break;
+                t=t-1; s[t]=(s[t]>s[t+1]);
+                break;
 		    case 13:
-			t=t-1; s[t]=(s[t]<=s[t+1]);
+                t=t-1; s[t]=(s[t]<=s[t+1]);
+                break;
+            case 14:  // 输出前几个，需要后面跟一个‘ ’来当分隔符
+				printf("%d ",s[t]);
+				t = t - 1;
+				break;
+			case 15: // 输出最后一个，不需要' '来当分隔符
+				printf("%d\n", s[t]);
+				t = t - 1;
 		}
 		break;
 	    case lod:
