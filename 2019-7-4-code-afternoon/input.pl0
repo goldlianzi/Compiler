@@ -4,7 +4,7 @@ var x,y,z,q,r;
 procedure multiply;
     var a, b, mybl:boolean, myread1, myread2;
     begin /* this is a note */
-        // Ô´²âÊÔÓÃÀı
+        // æºæµ‹è¯•ç”¨ä¾‹
         a:=x; b:=y; z:=0;
         mybl:=false;
         while b>0 do
@@ -14,15 +14,15 @@ procedure multiply;
                 b:=b/2
             end;
 
-        // ²âÊÔÓÃÀı1£ºÊäÈëÊä³ö ²¼¶û±äÁ¿
+        // æµ‹è¯•ç”¨ä¾‹1ï¼šè¾“å…¥è¾“å‡º å¸ƒå°”å˜é‡
         write(a, b);
         write(mybl);
         read(myread1, myread2);
         write(myread1);
         write(myread2);
 
-        // ²âÊÔÓÃÀı2£ºexitÍË³öµ±²ãwhile bÊä³öÓ¦Îª22
-        write("this is a test\n");
+        // æµ‹è¯•ç”¨ä¾‹2ï¼šexité€€å‡ºå½“å±‚while bè¾“å‡ºåº”ä¸º22
+        // write("this is a test\n");
         b:=21;
         while b<100 do
             begin
@@ -31,9 +31,9 @@ procedure multiply;
             end;
         write(b);
 
-        // ²âÊÔÓÃÀı3£ºif else ÊÇÔò´òÓ¡myread1£¬·ñÔò´òÓ¡myread2
-        if 33=33 then write(myread1);
-        //else write(myread2)
+        // æµ‹è¯•ç”¨ä¾‹3ï¼šif else æ˜¯åˆ™æ‰“å°myread1ï¼Œå¦åˆ™æ‰“å°myread2
+        if 33=33 then write(myread1)
+        else write(myread2)
 
     end;
 begin
