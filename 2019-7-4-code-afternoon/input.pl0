@@ -22,6 +22,7 @@ procedure multiply;
         write(myread2);
 
         // 测试用例2：exit退出当层while b输出应为22
+        write("this is a test\n");
         b:=21;
         while b<100 do
             begin
@@ -32,7 +33,7 @@ procedure multiply;
 
         // 测试用例3：if else 是则打印myread1，否则打印myread2
         if 33=33 then write(myread1);
-        else write(myread2)
+        //else write(myread2)
 
     end;
 begin

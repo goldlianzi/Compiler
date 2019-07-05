@@ -467,6 +467,7 @@ void statement(unsigned long long fsys) {
         code[cx1].a = cx + 1;
 
         //****!!!!else存在问题!!!!****
+        /*
         cx2 = cx;
         gen(jmp, 0, 0);
         if(sym == semicolon)
@@ -478,6 +479,7 @@ void statement(unsigned long long fsys) {
         } else {
             statement(fsys);
         }
+        */
     } else if (sym == beginsym) { // 单词为保留字begin
         getsym();
         statement(fsys | semicolon | endsym);
@@ -764,8 +766,8 @@ void main() {
     statbegsys = beginsym | callsym | ifsym | whilesym;  //{开始 调用 条件 循环} 保留字类型
     statbegsys = statbegsys | booleansym | integersym | realsym | writesym | readsym; // 新增加保留字
     statbegsys = statbegsys | elsesym | exitsym; // 新增加保留字
-    printf("%lld\n", elsesym);
-    printf("exit is %lld\n", statbegsys & exitsym);
+    //printf("%lld\n", elsesym);
+    //printf("exit is %lld\n", statbegsys & exitsym);
     facbegsys = ident | number | lparen; // {标识符 数字 左括号}
 
     printf("please input source program file name: ");
