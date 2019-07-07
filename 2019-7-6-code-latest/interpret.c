@@ -223,9 +223,26 @@ void interpret(){
                     }
                     t = t - 1;
                     break;
-                case 16: // 读出一个数据
+                case 16: // read()读出一个数据
                     scanf("%d", &tmp);
-                    s[++t] = tmp;
+                    s[++ t] = tmp;
+                    break;
+                case 17: // or 操作
+                    t = t - 1;
+                    s[t] = (s[t] | s[t + 1]);
+                    break;
+                case 18: // and 操作
+                    t = t - 1;
+                    s[t] = (s[t] & s[t + 1]);
+                    break;
+                case 19: // not 操作
+                    s[t] = ~s[t];
+                    s[t] = s[t] & 0x000007FF; //只保留数的低11位数
+                    break;
+                case 20: // mod 操作
+                    t = t - 1;
+                    s[t] = s[t] % s[t + 1];
+                    break;
             }
             break;
 	    case lod:

@@ -422,15 +422,25 @@ void factor(unsigned long long fsys) { // 处理标识符 数字 左括号
 void term(unsigned long long fsys) { // 处理乘除操作
     unsigned long long mulop;
 
-    factor(fsys | times | slash);
-    while (sym == times || sym == slash) {
+    factor(fsys | times | slash | orsym | andsym | divsym | modsym);
+    while (sym == times || sym == slash || sym == orsym || sym == andsym || sym == divsym || sym == modsym) {
         mulop = sym;
         getsym();
-        factor(fsys | times | slash);
+        factor(fsys | times | slash | orsym | andsym | divsym | modsym);
         if (mulop == times) { // 判断乘除以生成操作码
             gen(opr, 0, 4);
-        } else {
+        } else if(mulop == slash){
             gen(opr, 0, 5);
+        } else if(mulop == orsym){ // 或|操作
+            gen(opr, 0, 17);
+        } else if(mulop == andsym){ // 与&操作
+            gen(opr, 0, 18);
+        } else if(0){ // 非~操作
+            // 因为非操作的特殊性，将其放在expression()中实现
+        } else if(mulop == divsym){ // div整除 同/
+            gen(opr, 0, 5);
+        } else if(mulop == modsym){ // mod求余
+            gen(opr, 0, 20);
         }
     }
 }
@@ -438,24 +448,28 @@ void term(unsigned long long fsys) { // 处理乘除操作
 void expression(unsigned long long fsys) {
     unsigned long long addop;
 
-    if (sym == plus || sym == minus) { // 判断是 简单的负数表达式 eg num = -1
+    if (sym == plus || sym == minus || sym == notsym) { // 判断是 简单的负数表达式 eg num = -1
         addop = sym;
         getsym();
-        term(fsys | plus | minus);
+        term(fsys | plus | minus | notsym);
         if (addop == minus) {
             gen(opr, 0, 1);
+        } else if (addop == notsym) { // 非操作
+            gen(opr, 0, 19);
         }
     } else {
-        term(fsys | plus | minus);
+        term(fsys | plus | minus | notsym);
     }
-    while (sym == plus || sym == minus) { // 正常的加减式子
+    while (sym == plus || sym == minus || sym == notsym) { // 正常的加减式子
         addop = sym;
         getsym();
         term(fsys | plus | minus);
         if (addop == plus) {
             gen(opr, 0, 2);
-        } else {
+        } else if (addop == minus) {
             gen(opr, 0, 3);
+        } else if (addop == notsym) {
+            gen(opr, 0, 19);
         }
     }
 }
@@ -787,45 +801,55 @@ void main() {
         ssym[i] = nul;
     }
 
-    strcpy(word[0], "begin     "); //word[]字符串数组 存放保留字字符？
-    strcpy(word[1], "boolean   "); // *djm*
-    strcpy(word[2], "call      ");
-    strcpy(word[3], "const     ");
-    strcpy(word[4], "do        ");
-    strcpy(word[5], "else      ");
-    strcpy(word[6], "end       ");
-    strcpy(word[7], "exit      ");
-    strcpy(word[8], "if        ");
-    strcpy(word[9], "integer   "); // *djm*
-    strcpy(word[10], "odd       ");
-    strcpy(word[11], "procedure ");
-    strcpy(word[12], "read      ");
-    strcpy(word[13], "real      "); // *djm*
-    strcpy(word[14], "then      ");
-    strcpy(word[15], "type      ");
-    strcpy(word[16], "var       ");
-    strcpy(word[17], "while     ");
-    strcpy(word[18], "write     "); // *zyb*
+    strcpy(word[0], "and       "); //word[]字符串数组 存放保留字字符
+    strcpy(word[1], "begin     ");
+    strcpy(word[2], "boolean   ");
+    strcpy(word[3], "call      ");
+    strcpy(word[4], "const     ");
+    strcpy(word[5], "div       ");
+    strcpy(word[6], "do        ");
+    strcpy(word[7], "else      ");
+    strcpy(word[8], "end       ");
+    strcpy(word[9], "exit      ");
+    strcpy(word[10], "if        ");
+    strcpy(word[11], "integer   ");
+    strcpy(word[12], "mod       ");
+    strcpy(word[13], "not       ");
+    strcpy(word[14], "odd       ");
+    strcpy(word[15], "or        ");
+    strcpy(word[16], "procedure ");
+    strcpy(word[17], "read      ");
+    strcpy(word[18], "real      ");
+    strcpy(word[19], "then      ");
+    strcpy(word[20], "type      ");
+    strcpy(word[21], "var       ");
+    strcpy(word[22], "while     ");
+    strcpy(word[23], "write     ");
 
-    wsym[0] = beginsym; //wsym[]无符号长整型数组 关键字对应的十六进制码？
-    wsym[1] = booleansym;
-    wsym[2] = callsym;
-    wsym[3] = constsym;
-    wsym[4] = dosym;
-    wsym[5] = elsesym;
-    wsym[6] = endsym;
-    wsym[7] = exitsym;
-    wsym[8] = ifsym;
-    wsym[9] = integersym;
-    wsym[10] = oddsym;
-    wsym[11] = procsym;
-    wsym[12] = readsym;
-    wsym[13] = realsym;
-    wsym[14] = thensym;
-    wsym[15] = typesym;
-    wsym[16] = varsym;
-    wsym[17] = whilesym;
-    wsym[18] = writesym;
+    wsym[0] = andsym; //wsym[]无符号长整型数组 关键字对应的十六进制码
+    wsym[1] = beginsym;
+    wsym[2] = booleansym;
+    wsym[3] = callsym;
+    wsym[4] = constsym;
+    wsym[5] = divsym;
+    wsym[6] = dosym;
+    wsym[7] = elsesym;
+    wsym[8] = endsym;
+    wsym[9] = exitsym;
+    wsym[10] = ifsym;
+    wsym[11] = integersym;
+    wsym[12] = modsym;
+    wsym[13] = notsym;
+    wsym[14] = oddsym;
+    wsym[15] = orsym;
+    wsym[16] = procsym;
+    wsym[17] = readsym;
+    wsym[18] = realsym;
+    wsym[19] = thensym;
+    wsym[20] = typesym;
+    wsym[21] = varsym;
+    wsym[22] = whilesym;
+    wsym[23] = writesym;
 
     ssym['+'] = plus; //ssym[]类型同wsym[] 操作符对应的十六进制码？
     ssym['-'] = minus;
@@ -837,6 +861,9 @@ void main() {
     ssym[','] = comma;
     ssym['.'] = period;
     ssym[';'] = semicolon;
+    ssym['|'] = orsym;
+    ssym['&'] = andsym;
+    ssym['~'] = notsym;
 
     strcpy(mnemonic[lit], "lit"); //mnemonic[]字符串数组 放置中间代码操作符的对应符号？
     strcpy(mnemonic[opr], "opr");
@@ -850,9 +877,10 @@ void main() {
     declbegsys = constsym | varsym | procsym | typesym; //{常量 变量 过程名} 名字类型
     statbegsys = beginsym | callsym | ifsym | whilesym;  //{开始 调用 条件 循环} 保留字类型
     statbegsys = statbegsys | booleansym | integersym | realsym | writesym | readsym; // 新增加保留字
-    statbegsys = statbegsys | elsesym | exitsym; // 新增加保留字
-    //printf("%lld\n", elsesym);
-    //printf("exit is %lld\n", statbegsys & exitsym);
+    statbegsys = statbegsys | elsesym | exitsym | orsym | andsym | notsym; // 新增加保留字
+    statbegsys = statbegsys | divsym | modsym; // 新增加保留字
+    //printf("%lld\n", divsym);
+    //printf("notsym is %lld\n", statbegsys & divsym);
     facbegsys = ident | number | lparen; // {标识符 数字 左括号}
 
     printf("please input source program file name: ");

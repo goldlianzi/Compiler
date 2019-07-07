@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#define norw       19           // no. of reserved words
+#define norw       24           // no. of reserved words
 #define txmax      100          // length of identifier table
 #define nmax       14           // max. no. of digits in numbers  数字的最大位数
 #define al         10           // length of identifiers  限制的标识符长度
@@ -45,7 +45,12 @@
 #define integersym 0x400000000  //保留字 integer
 #define exitsym    0x800000000  //保留字 exit
 #define elsesym    0x1000000000  //保留字 else
-#define typesym    0x2000000000  //保留字 else
+#define typesym    0x2000000000  //保留字 type
+#define orsym      0x4000000000  //操作符 or
+#define andsym     0x8000000000  //操作符 and
+#define notsym     0x10000000000  //操作符 not
+#define divsym     0x20000000000  //操作符 div
+#define modsym     0x40000000000  //操作符 mod
 
 enum object { //名字表的名字类型  常量、变量、过程名
     constant, variable, proc, typeExp

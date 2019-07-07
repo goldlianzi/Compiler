@@ -19,13 +19,13 @@ procedure multiply;
             end;
 
         // 测试用例1：输入输出 布尔变量
-
+        /*
         write(a, b);
         write(mybl);
         read(myread1, myread2);
         write(myread1);
         write(myread2);
-
+        */
 
         // 测试用例2：exit退出当层while b输出应为22
         // write("this is a test\n");
@@ -46,9 +46,29 @@ procedure multiply;
         */
 
         // 测试用例4：实数赋值和打印
+        /*
         myreal:=8.8 + 2.1;
         write(myreal);
         myread1:=110.2;
+        write(myread1);
+        */
+
+        // 测试用例5：or and not
+        /*
+        read(myread1, myread2);
+        myread1:= myread1 | myread2;
+        write(myread1);
+        myread1:= myread1 & myread2;
+        write(myread1);
+        myread1:= ~ myread2;
+        write(myread1);
+        */
+
+        // 测试用例5：div mod
+        read(myread1, myread2);
+        myread1:= myread1 div myread2;
+        write(myread1);
+        myread1:= myread1 mod myread2;
         write(myread1)
     end;
 begin
