@@ -1,4 +1,4 @@
-         0  jmp    0             48
+         0  jmp    0            136
          1  jmp    0              2
          2  int    0              9
          3  lod    1              3
@@ -29,27 +29,115 @@
         28  opr    0              5
         29  sto    0              4
         30  jmp    0             11
-        31  opr    0             16
-        32  sto    0              6
-        33  opr    0             16
-        34  sto    0              7
-        35  lod    0              6
-        36  lod    0              7
-        37  opr    0              5
-        38  sto    0              6
-        39  lod    0              6
-        40  opr    0             15
-        41  lod    0              6
-        42  lod    0              7
-        43  opr    0             20
-        44  sto    0              6
-        45  lod    0              6
-        46  opr    0             15
-        47  opr    0              0
-        48  int    0              8
-        49  lit    0              7
-        50  sto    0              3
-        51  lit    0             85
-        52  sto    0              4
-        53  cal    0              2
-        54  opr    0              0
+        31  buf                     源测试用例结果
+        32  lod    0              3
+        33  opr    0             14
+        34  lod    0              4
+        35  opr    0             15
+        36  lod    0              5
+        37  opr    0             15
+        38  buf                接下来是6个测试用例
+        39  buf                                   
+        40  buf          *测试用例1* 输入输出 布尔
+        41  buf                     输入两个数 a b
+        42  opr    0             16
+        43  sto    0              6
+        44  opr    0             16
+        45  sto    0              7
+        46  lod    0              6
+        47  opr    0             15
+        48  lod    0              7
+        49  opr    0             15
+        50  buf                                   
+        51  buf                   *测试用例2* exit
+        52  lit    0             21
+        53  sto    0              4
+        54  lod    0              4
+        55  lit    0            100
+        56  opr    0             10
+        57  jpc    0             64
+        58  lod    0              4
+        59  lit    0              1
+        60  opr    0              2
+        61  sto    0              4
+        62  jmp    0             64
+        63  jmp    0             54
+        64  lod    0              4
+        65  opr    0             15
+        66  buf                                   
+        67  buf                   *测试用例3* 实数
+        68  lit    0        8405210
+        69  lit    0        8392827
+        70  opr    0              2
+        71  sto    0              8
+        72  lod    0              8
+        73  opr    0             15
+        74  lit    0        8613890
+        75  sto    0              6
+        76  lod    0              6
+        77  opr    0             15
+        78  buf                                   
+        79  buf             *测试用例4* or and not
+        80  buf                     输入两个数 c d
+        81  opr    0             16
+        82  sto    0              6
+        83  opr    0             16
+        84  sto    0              7
+        85  lod    0              6
+        86  lod    0              7
+        87  opr    0             17
+        88  sto    0              6
+        89  buf                           c or d =
+        90  lod    0              6
+        91  opr    0             15
+        92  lod    0              6
+        93  lod    0              7
+        94  opr    0             18
+        95  sto    0              6
+        96  buf                   (c or d) and d =
+        97  lod    0              6
+        98  opr    0             15
+        99  lod    0              7
+       100  opr    0             19
+       101  sto    0              6
+       102  buf                              ~ d =
+       103  lod    0              6
+       104  opr    0             15
+       105  buf                                   
+       106  buf                *测试用例5* div mod
+       107  buf                     输入两个数 e f
+       108  opr    0             16
+       109  sto    0              6
+       110  opr    0             16
+       111  sto    0              7
+       112  lod    0              6
+       113  lod    0              7
+       114  opr    0              5
+       115  sto    0              6
+       116  buf                          e div f =
+       117  lod    0              6
+       118  opr    0             15
+       119  lod    0              6
+       120  lod    0              7
+       121  opr    0             20
+       122  sto    0              6
+       123  buf                      (e/f) mod f =
+       124  lod    0              6
+       125  opr    0             15
+       126  buf                                   
+       127  buf                *测试用例6* if else
+       128  lit    0             33
+       129  lit    0             33
+       130  opr    0              8
+       131  jpc    0            134
+       132  buf                           进入then
+       133  jmp    0            135
+       134  buf                           进入else
+       135  opr    0              0
+       136  int    0              8
+       137  lit    0              7
+       138  sto    0              3
+       139  lit    0             85
+       140  sto    0              4
+       141  cal    0              2
+       142  opr    0              0

@@ -91,6 +91,7 @@ void getch() {
 
 void getsym() {
     long i, j, k;
+    long m;
 
     while (ch == ' ' || ch == '\t') { //过滤空格和制表符 ch存放当前取出来的符号
         getch();
@@ -170,6 +171,18 @@ void getsym() {
         } else {
             sym = gtr;
         }
+    } else if (ch == '"') {
+
+        getch();
+        m = 0;
+        strcpy(buff[buff_i], "");
+        while (ch != '"') {
+            buff[buff_i][m ++] = ch;
+            getch();
+        }
+        buff_i++;
+        sym = string;
+        getch();
     } else {
         sym = ssym[(unsigned char) ch];
         getch();
@@ -330,11 +343,17 @@ void typedeclaration() { // TypeDef --> ident = TypeExp;
 	}
 }
 
-void listcode() { // list code generated for this block 打印中间（目标）代码 zhj
-    long i;
+void listcode() { // list code generated for this block 打印中间（目标）代码 到txt文本
+    long i, j;
 
-    for(i=0; i<cx; i++){
-		fprintf(outfile,"%10d%5s%5d%15d\n", i, mnemonic[code[i].f], code[i].l, code[i].a);
+    j = 0;
+    for(i = 0; i < cx; i ++){
+        if(code[i].f == buf) { // 对形如 buf 0 0 的加工处理
+            fprintf(outfile,"%10d%5s%35s\n", i, mnemonic[code[i].f], buff[j++]);
+        } else {
+            fprintf(outfile,"%10d%5s%5d%15d\n", i, mnemonic[code[i].f], code[i].l, code[i].a);
+        }
+
     }
 }
 
@@ -414,6 +433,9 @@ void factor(unsigned long long fsys) { // 处理标识符 数字 左括号
             } else {
                 error(22);
             }
+        } else if (sym == string) { //当前单词类别为临时字符串
+            //gen(lit, 0, num);
+            getsym();
         }
         test(fsys, lparen, 23);
     }
@@ -619,23 +641,35 @@ void statement(unsigned long long fsys) {
 		getsym();
 		if (sym == lparen) {
 			getsym();
-		}
-		else {
+		} else {
 			// 报错处理
 		}
-		expression(fsys | comma | rparen);
-		if (sym == comma) gen(opr, 0, 14); else gen(opr, 0, 15);
-		while (sym == comma) {
-			getsym();
-			expression(fsys | comma | rparen);
-			if (sym == comma) gen(opr, 0, 14); else gen(opr, 0, 15);
+		if(sym == string){  // 输出临时字符串 eg write("this is a test\n");
+		    expression(fsys | comma | rparen | string);
+            gen(buf, 0, 0);
+            // getsym();
+		} else { // 输出变量
+            expression(fsys | comma | rparen | string);
+            if (sym == comma) {
+                gen(opr, 0, 14);
+            } else {
+                gen(opr, 0, 15);
+            }
+            while (sym == comma) {
+                getsym();
+                expression(fsys | comma | rparen | string);
+                if (sym == comma) {
+                    gen(opr, 0, 14);
+                } else {
+                    gen(opr, 0, 15);
+                }
+            }
 		}
-		if (sym == rparen) {
-			getsym();
-		}
-		else {
-			// 报错处理
-		}
+        if (sym == rparen) {
+            getsym();
+        } else {
+            // 报错处理
+        }
 	} else if (sym == readsym) { // read(ident{,ident})
 		getsym();
 		if (sym == lparen) {
@@ -873,15 +907,16 @@ void main() {
     strcpy(mnemonic[Int], "int");
     strcpy(mnemonic[jmp], "jmp");
     strcpy(mnemonic[jpc], "jpc");
+    strcpy(mnemonic[buf], "buf");
 
     declbegsys = constsym | varsym | procsym | typesym; //{常量 变量 过程名} 名字类型
     statbegsys = beginsym | callsym | ifsym | whilesym;  //{开始 调用 条件 循环} 保留字类型
     statbegsys = statbegsys | booleansym | integersym | realsym | writesym | readsym; // 新增加保留字
     statbegsys = statbegsys | elsesym | exitsym | orsym | andsym | notsym; // 新增加保留字
     statbegsys = statbegsys | divsym | modsym; // 新增加保留字
-    //printf("%lld\n", divsym);
-    //printf("notsym is %lld\n", statbegsys & divsym);
-    facbegsys = ident | number | lparen; // {标识符 数字 左括号}
+    facbegsys = ident | number | lparen | string; // {标识符 数字 左括号}
+    // printf("%lld\n", string);
+    // printf("string is %lld\n", facbegsys & string);
 
     printf("please input source program file name: ");
     scanf("%s", infilename);

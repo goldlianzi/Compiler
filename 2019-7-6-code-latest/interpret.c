@@ -4,96 +4,112 @@
 #include "pl0.h"
 
 void initialize(){
-       // char in[50]='15';
-        //printf("%d\n",char_int(in));
-        int no;
-        char tmp[80];
-        while(!feof(infile)){
-                fscanf(infile,"%s",tmp);//序号
-                no=atoi(tmp);
-                //printf("no:%d\n",no);
-                fscanf(infile,"%s",tmp);//code.f
-                //code[0].f=tmp;
-                if(!strcmp(tmp,"opr")){
-                        code[no].f=opr;
-                        //printf("f:%d\n",code[no].f);
-                }
-                else if(!strcmp(tmp,"lit")){
-                        code[no].f=lit;
-                        //printf("d:%d\n",code[no].f);
-                }
-                else if(!strcmp(tmp,"lod")){
-                        code[no].f=lod;
-                }
-                else if(!strcmp(tmp,"sto")){
-                        code[no].f=sto;
-                }
-                else if(!strcmp(tmp,"cal")){
-                        code[no].f=cal;
-                }
-                else if(!strcmp(tmp,"int")){
-                        //printf("jjj");
-                        code[no].f=Int;
-                }
-                else if(!strcmp(tmp,"jmp")){
-                        code[no].f=jmp;
-                }
-                else if(!strcmp(tmp,"jpc")){
-                        code[no].f=jpc;
-                }
-                else{
-                        break;
-                        printf("error!\n");
-                }
-                fscanf(infile,"%s",tmp);//code.l
-                code[no].l=atoi(tmp);
-                //printf("code.l:%d\n",code[no].l);
-                //strcpy(code[0].f,tmp);
-                fscanf(infile,"%s",tmp);//code.a
-                code[no].a=atoi(tmp);
-                //printf("code.a:%d\n",code[no].a);
-                //printf("%s\n",tmp);
-                //memset(tmp,0,80);
-
+   // char in[50]='15';
+    //printf("%d\n",char_int(in));
+    int no;
+    char tmp[80];
+    fscanf(infile, "%s", tmp);//序号
+    while (!feof(infile)) {
+        no = atoi(tmp);
+        //printf("no:%d\n",no);
+        fscanf(infile, "%s", tmp);//code.f
+        //code[0].f=tmp;
+        if (!strcmp(tmp, "opr")) {
+            code[no].f = opr;
+        } else if (!strcmp(tmp, "lit")) {
+            code[no].f = lit;
+        } else if (!strcmp(tmp, "lod")) {
+            code[no].f = lod;
+        } else if (!strcmp(tmp, "sto")) {
+            code[no].f = sto;
+        } else if (!strcmp(tmp, "cal")) {
+            code[no].f = cal;
+        } else if (!strcmp(tmp, "int")) {
+            code[no].f = Int;
+        } else if (!strcmp(tmp, "jmp")) {
+            code[no].f = jmp;
+        } else if (!strcmp(tmp, "jpc")) {
+            code[no].f = jpc;
+        } else if (!strcmp(tmp, "buf")) {
+            code[no].f = buf;
+        } else {
+            break;
+            printf("error!\n");
         }
-        //printf("code.a:%d\n",code[3].a);
 
+        if (code[no].f == buf) { // 打印字符串
+            strcpy(buff[buff_i], "");
+            fscanf(infile, "%s", tmp);
+            while (atoi(tmp) != (no + 1)) {
+                strcat(buff[buff_i], tmp);
+                strcat(buff[buff_i], " ");
+                fscanf(infile, "%s", tmp);
+            }
+            code[no].l = 0;
+            code[no].a = 0;
+            buff_i++;
+            continue;
+        }
+
+        fscanf(infile, "%s", tmp);//code.l
+        code[no].l = atoi(tmp);
+        //printf("code.l:%d\n",code[no].l);
+        //strcpy(code[0].f,tmp);
+        fscanf(infile, "%s", tmp);//code.a
+        code[no].a = atoi(tmp);
+        //printf("code.a:%d\n",code[no].a);
+        //printf("%s\n",tmp);
+        //memset(tmp,0,80);
+        fscanf(infile, "%s", tmp);
+    }
+    //printf("code.a:%d\n",code[3].a);
 }
 
 long base(long b, long l){
     long b1;
 
-    b1=b;
-    while (l>0){	// find base l levels down
-	b1=s[b1]; l=l-1;
+    b1 = b;
+    while (l > 0) {	// find base l levels down
+        b1 = s[b1];
+        l = l - 1;
     }
     return b1;
 }
 
 void interpret(){
-    long p,b,t;		// program-, base-, topstack-registers
+    long p, b, t;	// program-, base-, topstack-registers
     instruction i;	// instruction register
+
+    long numm = 0;
 
     int tmp; // 输入暂存处
     long tmp1 = 0, tmp2 = 0, tmp3 = 0, tmp4 = 0, opr_result = 0, amend_bit = 1; //修正器使用
 
     printf("### start interpreting ###\n");
-    t=0; b=1; p=0;
-    s[1]=0; s[2]=0; s[3]=0;
+    t = 0;
+    b = 1;
+    p = 0;
+    s[1] = 0;
+    s[2] = 0;
+    s[3] = 0;
     do{
-	i=code[p]; p=p+1;
+	i = code[p];
+    p = p + 1;
 
-	switch(i.f){
+	switch (i.f) {
 	    case lit:
-		t=t+1; s[t]=i.a;
-		break;
+            t = t + 1;
+            s[t] = i.a;
+            break;
 	    case opr:
             switch(i.a){ 	// operator
                 case 0:	// return
-                    t=b-1; p=s[t+3]; b=s[t+2];
+                    t = b - 1;
+                    p = s[t + 3];
+                    b = s[t + 2];
                     break;
                 case 1:
-                    s[t]=-s[t];
+                    s[t] = -s[t];
                     break;
                 case 2:
                     /* 加法修正器 */
@@ -166,28 +182,35 @@ void interpret(){
                     }
                     break;
                 case 5:
-                    t=t-1; s[t]=s[t]/s[t+1];
+                    t = t - 1;
+                    s[t] = s[t] / s[t + 1];
                     break;
                 case 6:
-                    s[t]=s[t]%2;
+                    s[t] = s[t] % 2;
                     break;
                 case 8:
-                    t=t-1; s[t]=(s[t]==s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] == s[t + 1]);
                     break;
                 case 9:
-                    t=t-1; s[t]=(s[t]!=s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] != s[t + 1]);
                     break;
                 case 10:
-                    t=t-1; s[t]=(s[t]<s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] < s[t + 1]);
                     break;
                 case 11:
-                    t=t-1; s[t]=(s[t]>=s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] >= s[t + 1]);
                     break;
                 case 12:
-                    t=t-1; s[t]=(s[t]>s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] > s[t + 1]);
                     break;
                 case 13:
-                    t=t-1; s[t]=(s[t]<=s[t+1]);
+                    t = t - 1;
+                    s[t] = (s[t] <= s[t + 1]);
                     break;
                 case 14:  // 输出前几个，需要后面跟一个‘ ’来当分隔符
                     if (s[t] & 0x00400000) {  //布尔修正
@@ -246,30 +269,38 @@ void interpret(){
             }
             break;
 	    case lod:
-            t=t+1; s[t]=s[base(b,i.l)+i.a];
+            t = t + 1;
+            s[t] = s[base(b, i.l) + i.a];
             break;
 	    case sto:
-            s[base(b,i.l)+i.a]=s[t];
+            s[base(b, i.l) + i.a] = s[t];
             //printf("%10d\n", s[t]); t=t-1; 若需查看中间代码输出，请消除此处注释，或者查看对应的txt文件即可
             break;
 	    case cal:		// generate new block mark
-            s[t+1]=base(b,i.l); s[t+2]=b; s[t+3]=p;
-            b=t+1; p=i.a;
+            s[t + 1] = base(b, i.l);
+            s[t + 2] = b;
+            s[t + 3] = p;
+            b = t + 1;
+            p = i.a;
             break;
 	    case Int:
             //printf("okkk!!!\n");
-            t=t+i.a;
+            t = t + i.a;
             break;
 	    case jmp:
-            p=i.a;
+            p = i.a;
             break;
 	    case jpc:
-            if(s[t]==0){
-                p=i.a;
+            if(s[t] == 0){
+                p = i.a;
             }
-            t=t-1;
+            t = t - 1;
+            break;
+        case buf:
+            printf("%s\n", buff[numm++]);
+            break;
 	}
-    }while(p!=0);
+    }while (p != 0) ;
     printf("### end interpreting ###\n");
 }
 
@@ -279,13 +310,12 @@ int main()
         scanf("%s", infilename);
         printf("\n");
         //strcpy(infilename,"tests.txt");
-        if ((infile = fopen(infilename, "r")) == NULL)
-        {
-                printf("File %s can't be opened.\n", infilename);
-                exit(1);
-        }else{
-                initialize();
-                interpret();
+        if ((infile = fopen(infilename, "r")) == NULL) {
+            printf("File %s can't be opened.\n", infilename);
+            exit(1);
+        } else {
+            initialize();
+            interpret();
         }
         printf("interpret success\n");
         fclose(infile);

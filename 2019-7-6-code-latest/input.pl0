@@ -18,18 +18,23 @@ procedure multiply;
                 b:=b/2
             end;
 
-        // 测试用例1：输入输出 布尔变量
-        /*
+        write("源测试用例结果");
         write(a, b);
         write(mybl);
+
+        write("接下来是6个测试用例");
+
+        // 测试用例1：输入输出 布尔变量
+        write("      ");
+        write("*测试用例1* 输入输出 布尔");
+        write("输入两个数 a b");
         read(myread1, myread2);
         write(myread1);
         write(myread2);
-        */
 
         // 测试用例2：exit退出当层while b输出应为22
-        // write("this is a test\n");
-        /*
+        write("      ");
+        write("*测试用例2* exit");
         b:=21;
         while b<100 do
             begin
@@ -37,39 +42,48 @@ procedure multiply;
                 exit
             end;
         write(b);
-        */
+        //exit
 
-        // 测试用例3：if else 是则打印myread1，否则打印myread2
-        /*
-        if 33=33 then write(myread1)
-        else write(myread2);
-        */
-
-        // 测试用例4：实数赋值和打印
-        /*
-        myreal:=8.8 + 2.1;
+        // 测试用例3：实数赋值和打印
+        write("      ");
+        write("*测试用例3* 实数");
+        myreal:=8.218 + 2.123;
         write(myreal);
         myread1:=110.2;
         write(myread1);
-        */
 
-        // 测试用例5：or and not
-        /*
+        // 测试用例4：or and not
+        write("      ");
+        write("*测试用例4* or and not");
+        write("输入两个数 c d");
         read(myread1, myread2);
         myread1:= myread1 | myread2;
+        write("c or d =");
         write(myread1);
         myread1:= myread1 & myread2;
+        write("(c or d) and d =");
         write(myread1);
         myread1:= ~ myread2;
+        write("~ d =");
         write(myread1);
-        */
 
         // 测试用例5：div mod
+        write("      ");
+        write("*测试用例5* div mod");
+        write("输入两个数 e f");
         read(myread1, myread2);
         myread1:= myread1 div myread2;
+        write("e div f =");
         write(myread1);
         myread1:= myread1 mod myread2;
-        write(myread1)
+        write("(e/f) mod f =");
+        write(myread1);
+
+        // 测试用例6：if else 是则打印myread1，否则打印myread2
+        write("      ");
+        write("*测试用例6* if else");
+        if 33=33 then write("进入then")
+        else write("进入else")
     end;
 begin
     x:=m; y:=n;

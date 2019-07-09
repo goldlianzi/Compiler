@@ -51,6 +51,7 @@
 #define notsym     0x10000000000  //操作符 not
 #define divsym     0x20000000000  //操作符 div
 #define modsym     0x40000000000  //操作符 mod
+#define string     0x80000000000  //字符串（用户在pl0程序中写的字符串），暂时不写入Var_object
 
 enum object { //名字表的名字类型  常量、变量、过程名
     constant, variable, proc, typeExp
@@ -61,7 +62,7 @@ enum Var_object { //变量类型  布尔、实型、整型（默认）
 };
 
 enum fct {
-    lit, opr, lod, sto, cal, Int, jmp, jpc         // functions
+    lit, opr, lod, sto, cal, Int, jmp, jpc, buf         // functions
 };
 
 typedef struct{ //中间代码存储区
@@ -69,14 +70,17 @@ typedef struct{ //中间代码存储区
     long l; 		// level
     long a; 		// displacement address
 } instruction;
-/*  lit 0, a : load constant a 常数入栈
+/*
+    lit 0, a : load constant a 常数入栈
     opr 0, a : execute operation a 加减乘除比较大小等操作
     lod l, a : load variable l, a 变量入栈
     sto l, a : store variable l, a 把栈顶的变量值赋予a
     cal l, a : call procedure a at level l 调用过程a
     Int 0, a : increment t-register by a 开辟a个数据空间
     jmp 0, a : jump to a 无条件转移
-    jpc 0, a : jump conditional to a 有条件转移，a为转移地址，栈顶非零时转移       */
+    jpc 0, a : jump conditional to a 有条件转移，a为转移地址，栈顶非零时转移
+    buf 0, 0 : printf string behind of 0
+*/
 
 char ch;                // last character read   存放当前读取的字符，初值为空；
 unsigned long long sym;      // last symbol read  存放每个单词的类别，用内部编码形式表示。
@@ -124,3 +128,6 @@ long s[stacksize];	// datastore
 //2019-7-4 exit
 long whilenum = 0;
 long exitcx = 0;
+
+char buff[100][50] = {" "};
+long buff_i = 0;
